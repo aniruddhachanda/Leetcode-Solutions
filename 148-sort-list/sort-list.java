@@ -10,28 +10,51 @@
  */
 class Solution {
     public ListNode sortList(ListNode head) {
-       ArrayList<Integer>arr=convertArray(head);
-       Collections.sort(arr);
-       if(head==null){
-        return null;
-       }
-       head=new ListNode(arr.get(0));
-       ListNode mover=head;
-       for(int i=1;i<arr.size();i++){
-        ListNode temp=new ListNode(arr.get(i));
-        mover.next=temp;
-        mover=temp;
-       }
-       return head;
-
-    }
-    public ArrayList<Integer> convertArray(ListNode head){
-        ArrayList<Integer>ans=new ArrayList<>();
-        ListNode temp=head;
-        while(temp!=null){
-            ans.add(temp.val);
-            temp=temp.next;
+        if(head==null||head.next==null){
+            return head;
         }
-        return ans;
+        ListNode middle=findMiddle(head);
+        ListNode left=head;
+        ListNode right=middle.next;
+        middle.next=null;
+
+        left=sortList(left);
+        right=sortList(right);
+
+        return mergeSortList(left,right);
+    }
+    public ListNode findMiddle(ListNode head){
+        ListNode slow=head;
+        ListNode fast=head.next;
+        while(fast!=null&&fast.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        return slow;
+    }
+    public ListNode mergeSortList(ListNode list1,ListNode list2){
+        ListNode temp1=list1;
+        ListNode temp2=list2;
+        ListNode dNode=new ListNode(-1);
+        ListNode temp=dNode;
+        while(temp1!=null&&temp2!=null){
+            if(temp1.val<temp2.val){
+                temp.next=temp1;
+                temp=temp1;
+                temp1=temp1.next;
+            }
+            else{
+                temp.next=temp2;
+                temp=temp2;
+                temp2=temp2.next;
+            }
+        }
+        if(temp1!=null){
+            temp.next=temp1;
+        }
+        else{
+            temp.next=temp2;
+        }
+        return dNode.next;
     }
 }
