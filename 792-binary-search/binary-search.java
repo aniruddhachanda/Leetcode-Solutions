@@ -7,11 +7,11 @@ class Solution {
             if(nums[mid]==target){
                 return mid;
             }
-            if(nums[mid]<target){
-                low++;
+            else if(nums[mid]<target){
+                low=mid+1;
             }
             else{
-                high--;
+                high=mid-1;
             }
         }
         return -1;
